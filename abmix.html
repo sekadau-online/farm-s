@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Racikan Pupuk NPK 10-20-30</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f9f9f9; }
+    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+    td, th { border: 1px solid #ccc; padding: 6px 10px; }
+    input[type="number"] { width: 60px; }
+    button { margin-top: 10px; padding: 8px 16px; }
+    textarea { width: 100%; height: 150px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Racikan Pupuk NPK 10-20-30</h2>
+
+  <table id="table">
+    <thead>
+      <tr>
+        <th>Bahan</th>
+        <th>N %</th>
+        <th>P₂O₅ %</th>
+        <th>K₂O %</th>
+        <th>S %</th>
+        <th>MgO %</th>
+        <th>CaO %</th>
+        <th>Jumlah (g)</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+  <button onclick="hitung()">Hitung Kandungan</button>
+  <button onclick="exportJSON()">Export JSON</button>
+  <button onclick="importJSON()">Import JSON</button>
+
+  <h3>Hasil:</h3>
+  <div id="hasil"></div>
+
+  <h3>Data JSON</h3>
+  <textarea id="jsonArea"></textarea>
+
+<script>
+const bahan = [
+  { nama: "K2O 60%", n: 0, p: 0, k: 60, s: 0, mg: 0, ca: 0 },
+  { nama: "K2O 52% S 18%", n: 0, p: 0, k: 52, s: 18, mg: 0, ca: 0 },
+  { nama: "P2O5 52% K2O 34%", n: 0, p: 52, k: 34, s: 0, mg: 0, ca: 0 },
+  { nama: "MgO 16% S 13%", n: 0, p: 0, k: 0, s: 13, mg: 16, ca: 0 },
+  { nama: "N 12% P2O5 61%", n: 12, p: 61, k: 0, s: 0, mg: 0, ca: 0 },
+  { nama: "CaO 26% N 15.5%", n: 15.5, p: 0, k: 0, s: 0, mg: 0, ca: 26 },
+  { nama: "N 13% K2O 46%", n: 13, p: 0, k: 46, s: 0, mg: 0, ca: 0 },
+];
+
+const tbody = document.getElementById("tbody");
+
+bahan.forEach((b, i) => {
+  const row = document.createElement("tr");
+  row.innerHTML = `
+    <td>${b.nama}</td>
+    <td>${b.n}</td>
+    <td>${b.p}</td>
+    <td>${b.k}</td>
+    <td>${b.s}</td>
+    <td>${b.mg}</td>
+    <td>${b.ca}</td>
+    <td><input type="number" value="0" id="bahan${i}" /></td>
+  `;
+  tbody.appendChild(row);
+});
+
+function hitung() {
+  let total = { n: 0, p: 0, k: 0, s: 0, mg: 0, ca: 0 };
+  let hasil = "";
+  bahan.forEach((b, i) => {
+    const g = parseFloat(document.getElementById(`bahan${i}`).value) || 0;
+    total.n += b.n * g / 100;
+    total.p += b.p * g / 100;
+    total.k += b.k * g / 100;
+    total.s += b.s * g / 100;
+    total.mg += b.mg * g / 100;
+    total.ca += b.ca * g / 100;
+  });
+
+  hasil = `
+    <strong>Kandungan Total:</strong><br>
+    - N: ${total.n.toFixed(2)} g<br>
+    - P₂O₅: ${total.p.toFixed(2)} g<br>
+    - K₂O: ${total.k.toFixed(2)} g<br>
+    - S: ${total.s.toFixed(2)} g<br>
+    - MgO: ${total.mg.toFixed(2)} g<br>
+    - CaO: ${total.ca.toFixed(2)} g
+  `;
+
+  document.getElementById("hasil").innerHTML = hasil;
+}
+
+function exportJSON() {
+  let data = {};
+  bahan.forEach((b, i) => {
+    data[`bahan${i}`] = parseFloat(document.getElementById(`bahan${i}`).value) || 0;
+  });
+  document.getElementById("jsonArea").value = JSON.stringify(data, null, 2);
+}
+
+function importJSON() {
+  try {
+    const data = JSON.parse(document.getElementById("jsonArea").value);
+    bahan.forEach((_, i) => {
+      if (data[`bahan${i}`] !== undefined) {
+        document.getElementById(`bahan${i}`).value = data[`bahan${i}`];
+      }
+    });
+    hitung();
+  } catch (e) {
+    alert("JSON tidak valid");
+  }
+}
+</script>
+</body>
+</html>
