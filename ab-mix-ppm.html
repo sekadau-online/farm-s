@@ -1,0 +1,154 @@
+<!DOCTYPE html><html lang="id"><head>
+  <meta charset="UTF-8">
+  <title>NPK - Racikan Pupuk AB Mix</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f9f9f9; }
+    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+    td, th { border: 1px solid #ccc; padding: 6px 10px; }
+    input[type="number"], select { width: 80px; }
+    button { margin-top: 10px; padding: 8px 16px; }
+    textarea { width: 100%; height: 150px; margin-top: 10px; }
+    .preset-select { margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <h2>NPK - Racikan AB Mix</h2>
+  <label for="preset">Preset Target:</label>
+  <select id="preset" class="preset-select" onchange="loadPreset()">
+    <option value="custom">-- Pilih Preset --</option>
+    <option value="vegetatif_semai">Vegetatif Semai</option>
+    <option value="vegetatif_daun_batang">Vegetatif Daun Batang</option>
+    <option value="generatif_bunga">Generatif Bunga</option>
+    <option value="generatif_pembuahan">Generatif Pembuahan</option>
+    <option value="generatif_pembesaran">Generatif Pembesaran</option>
+    <option value="sayuran_daun">Sayuran Daun</option>
+  </select>
+  <input type="file" id="presetFile" accept=".json" onchange="importPresetFile()" />  <h3>Bagian A</h3>
+  <table id="tableA">
+    <thead>
+      <tr>
+        <th>Bahan</th><th>N %</th><th>P₂O₅ %</th><th>K₂O %</th><th>S %</th><th>MgO %</th><th>CaO %</th><th>Jumlah (g)</th>
+      </tr>
+    </thead>
+    <tbody id="tbodyA"></tbody>
+  </table>  <h3>Bagian B</h3>
+  <table id="tableB">
+    <thead>
+      <tr>
+        <th>Bahan</th><th>N %</th><th>P₂O₅ %</th><th>K₂O %</th><th>S %</th><th>MgO %</th><th>CaO %</th><th>Jumlah (g)</th>
+      </tr>
+    </thead>
+    <tbody id="tbodyB"></tbody>
+  </table><button onclick="hitung()">Hitung Kandungan</button> <button onclick="exportJSON()">Export JSON</button> <button onclick="importJSON()">Import JSON</button>
+
+  <h3>Hasil:</h3>
+  <div id="hasil"></div>
+  <h3>Data JSON</h3>
+  <textarea id="jsonArea"></textarea><script>
+const bahan = [
+  { nama: "K2O 60%", n: 0, p: 0, k: 60, s: 0, mg: 0, ca: 0, bagian: "A" },
+  { nama: "K2O 52% S 18%", n: 0, p: 0, k: 52, s: 18, mg: 0, ca: 0, bagian: "A" },
+  { nama: "P2O5 52% K2O 34%", n: 0, p: 52, k: 34, s: 0, mg: 0, ca: 0, bagian: "A" },
+  { nama: "MgO 16% S 13%", n: 0, p: 0, k: 0, s: 13, mg: 16, ca: 0, bagian: "A" },
+  { nama: "N 12% P2O5 61%", n: 12, p: 61, k: 0, s: 0, mg: 0, ca: 0, bagian: "A" },
+  { nama: "CaO 26% N 15.5%", n: 15.5, p: 0, k: 0, s: 0, mg: 0, ca: 26, bagian: "B" },
+  { nama: "N 13% K2O 46%", n: 13, p: 0, k: 46, s: 0, mg: 0, ca: 0, bagian: "B" },
+];
+
+let presetData = {
+  vegetatif_semai: [0, 0, 100, 30, 80, 120, 80],
+  vegetatif_daun_batang: [140, 0, 160, 50, 100, 180, 180],
+  generatif_bunga: [40, 70, 160, 40, 100, 180, 160],
+  generatif_pembuahan: [30, 80, 180, 30, 90, 160, 170],
+  generatif_pembesaran: [20, 90, 200, 30, 80, 150, 160],
+  sayuran_daun: [130, 0, 130, 40, 80, 150, 130]
+};
+
+const tbodyA = document.getElementById("tbodyA");
+const tbodyB = document.getElementById("tbodyB");
+bahan.forEach((b, i) => {
+  const row = document.createElement("tr");
+  row.innerHTML = `
+    <td>${b.nama}</td><td>${b.n}</td><td>${b.p}</td><td>${b.k}</td><td>${b.s}</td><td>${b.mg}</td><td>${b.ca}</td>
+    <td><input type="number" value="0" id="bahan${i}" /></td>
+  `;
+  (b.bagian === "A" ? tbodyA : tbodyB).appendChild(row);
+});
+
+function loadPreset() {
+  const preset = document.getElementById("preset").value;
+  if (preset !== "custom" && presetData[preset]) {
+    presetData[preset].forEach((val, i) => {
+      document.getElementById(`bahan${i}`).value = val;
+    });
+    hitung();
+  }
+}
+
+function importPresetFile() {
+  const fileInput = document.getElementById("presetFile");
+  const file = fileInput.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const imported = JSON.parse(e.target.result);
+        presetData = { ...presetData, ...imported };
+        alert("Preset berhasil diimpor!");
+      } catch (err) {
+        alert("Gagal mengimpor preset: " + err.message);
+      }
+    };
+    reader.readAsText(file);
+  }
+}
+
+function hitung() {
+  let total = { n: 0, p: 0, k: 0, s: 0, mg: 0, ca: 0 };
+  let totalGram = 0;
+  bahan.forEach((b, i) => {
+    const g = parseFloat(document.getElementById(`bahan${i}`).value) || 0;
+    total.n += b.n * g / 100;
+    total.p += b.p * g / 100;
+    total.k += b.k * g / 100;
+    total.s += b.s * g / 100;
+    total.mg += b.mg * g / 100;
+    total.ca += b.ca * g / 100;
+    totalGram += g;
+  });
+  const ppmFactor = 1000 / totalGram;
+  const hasil = `
+    <strong>Kandungan Total:</strong><br>
+    - N: ${total.n.toFixed(2)} g (${(total.n * ppmFactor).toFixed(0)} ppm)<br>
+    - P₂O₅: ${total.p.toFixed(2)} g (${(total.p * ppmFactor).toFixed(0)} ppm)<br>
+    - K₂O: ${total.k.toFixed(2)} g (${(total.k * ppmFactor).toFixed(0)} ppm)<br>
+    - S: ${total.s.toFixed(2)} g (${(total.s * ppmFactor).toFixed(0)} ppm)<br>
+    - MgO: ${total.mg.toFixed(2)} g (${(total.mg * ppmFactor).toFixed(0)} ppm)<br>
+    - CaO: ${total.ca.toFixed(2)} g (${(total.ca * ppmFactor).toFixed(0)} ppm)<br>
+    <br><strong>Total larutan:</strong> ${totalGram.toFixed(0)} g dalam 1L air
+  `;
+  document.getElementById("hasil").innerHTML = hasil;
+}
+
+function exportJSON() {
+  let data = {};
+  bahan.forEach((b, i) => {
+    data[`bahan${i}`] = parseFloat(document.getElementById(`bahan${i}`).value) || 0;
+  });
+  document.getElementById("jsonArea").value = JSON.stringify(data, null, 2);
+}
+
+function importJSON() {
+  try {
+    const data = JSON.parse(document.getElementById("jsonArea").value);
+    bahan.forEach((_, i) => {
+      if (data[`bahan${i}`] !== undefined) {
+        document.getElementById(`bahan${i}`).value = data[`bahan${i}`];
+      }
+    });
+    hitung();
+  } catch (e) {
+    alert("JSON tidak valid");
+  }
+}
+</script></body></html>
