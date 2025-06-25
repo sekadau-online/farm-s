@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>NPK - Racikan Pupuk AB Mix</title>
+  <style>
+    body { 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      padding: 20px; 
+      background: linear-gradient(to bottom, #f0f9ff, #e6f7ff);
+      color: #333;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .container {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      padding: 25px;
+      margin-top: 20px;
+    }
+    h1, h2, h3 {
+      color: #2c6e3c;
+      margin-top: 0;
+    }
+    h1 {
+      text-align: center;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #e0f0e7;
+      margin-bottom: 25px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      background-color: white;
+    }
+    td, th {
+      border: 1px solid #d1e7dd;
+      padding: 10px 12px;
+      text-align: center;
+    }
+    th {
+      background-color: #2c6e3c;
+      color: white;
+      font-weight: 600;
+    }
+    tr:nth-child(even) {
+      background-color: #f8fcf9;
+    }
+    input[type="number"], select {
+      width: 90px;
+      padding: 8px;
+      border: 1px solid #c2e0d0;
+      border-radius: 4px;
+      text-align: center;
+      font-size: 14px;
+    }
+    input[type="number"]:focus {
+      outline: none;
+      border-color: #2c6e3c;
+      box-shadow: 0 0 0 2px rgba(44, 110, 60, 0.2);
+    }
+    button {
+      background-color: #2c6e3c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 18px;
+      margin: 8px 5px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    button:hover {
+      background-color: #245530;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    button.secondary {
+      background-color: #4a8da8;
+    }
+    button.secondary:hover {
+      background-color: #3f7a91;
+    }
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 15px 0;
+    }
+    .preset-section {
+      background-color: #f8fcf9;
+      padding: 18px;
+      border-radius: 8px;
+      margin-bottom: 25px;
+      border: 1px solid #d1e7dd;
+    }
+    .preset-select {
+      margin-bottom: 10px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .preset-select label {
+      font-weight: 600;
+      color: #2c6e3c;
+    }
+    textarea {
+      width: 100%;
+      height: 150px;
+      margin-top: 10px;
+      padding: 12px;
+      border: 1px solid #d1e7dd;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 14px;
+    }
+    .result-box {
+      background-color: #f0f9eb;
+      border-left: 4px solid #2c6e3c;
+      padding: 15px;
+      border-radius: 0 6px 6px 0;
+      margin: 20px 0;
+    }
+    .result-box h3 {
+      margin-top: 0;
+      color: #2c6e3c;
+    }
+    .file-input-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+    .file-input-wrapper input[type="file"] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    .file-input-label {
+      display: inline-block;
+      padding: 10px 18px;
+      background-color: #4a8da8;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .file-input-label:hover {
+      background-color: #3f7a91;
+    }
+    .info-icon {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      background-color: #2c6e3c;
+      color: white;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 18px;
+      font-size: 12px;
+      margin-left: 5px;
+      cursor: help;
+    }
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+    .tooltip .tooltip-text {
+      visibility: hidden;
+      width: 280px;
+      background-color: #2c6e3c;
+      color: white;
+      text-align: center;
+      border-radius: 6px;
+      padding: 10px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 13px;
+      font-weight: normal;
+    }
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    .section-title h2, .section-title h3 {
+      margin: 0;
+    }
+    .section-icon {
+      background-color: #d1e7dd;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #2c6e3c;
+      font-size: 18px;
+    }
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 15px;
+      color: #6c757d;
+      font-size: 14px;
+      border-top: 1px solid #e0f0e7;
+    }
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      .button-group {
+        flex-direction: column;
+      }
+      .button-group button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Kalkulator Racikan Pupuk AB Mix</h1>
+    
+    <div class="preset-section">
+      <div class="section-title">
+        <div class="section-icon">🌱</div>
+        <h2>Preset Target Pupuk</h2>
+      </div>
+      
+      <div class="preset-select">
+        <label for="preset">Pilih Preset:</label>
+        <select id="preset" onchange="loadPreset()">
+          <option value="custom">-- Pilih Preset --</option>
+          <option value="vegetatif_semai">🌿 Vegetatif Semai</option>
+          <option value="vegetatif_pembesaran">🌿 Vegetatif Pembesaran Daun & Batang</option>
+          <option value="generatif_bunga">🌸 Generatif Pembungaan</option>
+          <option value="generatif_pembuahan">🍅 Generatif Pembentukan Buah</option>
+          <option value="generatif_pembesaran_buah">🍅 Generatif Pembesaran Buah</option>
+          <option value="sayuran_daun">🥬 Sayuran Daun</option>
+        </select>
+        
+        <div class="file-input-wrapper">
+          <button class="secondary">📥 Import Preset</button>
+          <input type="file" id="presetFile" accept=".json" onchange="importPresetFile()" />
+        </div>
+        <button onclick="exportPreset()" class="secondary">📤 Export Preset</button>
+      </div>
+      
+      <div class="tooltip">
+        <span class="info-icon">i</span>
+        <span class="tooltip-text">
+          <strong>Informasi Preset:</strong><br>
+          - Vegetatif: Fokus pada pertumbuhan daun dan batang<br>
+          - Generatif: Fokus pada pembungaan dan pembuahan<br>
+          - Sayuran Daun: Formula khusus untuk sayuran berdaun
+        </span>
+      </div>
+    </div>
+    
+    <div class="section-title">
+      <div class="section-icon">🧪</div>
+      <h2>Komposisi Pupuk</h2>
+    </div>
+    
+    <div class="section-title">
+      <div class="section-icon">A</div>
+      <h3>Bagian A</h3>
+    </div>
+    <table id="tableA">
+      <thead>
+        <tr>
+          <th>Bahan</th>
+          <th>N %</th>
+          <th>P₂O₅ %</th>
+          <th>K₂O %</th>
+          <th>S %</th>
+          <th>MgO %</th>
+          <th>CaO %</th>
+          <th>Jumlah (g)</th>
+        </tr>
+      </thead>
+      <tbody id="tbodyA"></tbody>
+    </table>
+    
+    <div class="section-title">
+      <div class="section-icon">B</div>
+      <h3>Bagian B</h3>
+    </div>
+    <table id="tableB">
+      <thead>
+        <tr>
+          <th>Bahan</th>
+          <th>N %</th>
+          <th>P₂O₅ %</th>
+          <th>K₂O %</th>
+          <th>S %</th>
+          <th>MgO %</th>
+          <th>CaO %</th>
+          <th>Jumlah (g)</th>
+        </tr>
+      </thead>
+      <tbody id="tbodyB"></tbody>
+    </table>
+    
+    <div class="button-group">
+      <button onclick="hitung()">🧮 Hitung Kandungan</button>
+      <button onclick="exportJSON()" class="secondary">💾 Export Data</button>
+      <div class="file-input-wrapper">
+        <button class="secondary">📂 Import Data</button>
+        <input type="file" id="dataFile" accept=".json" onchange="importDataFile()" />
+      </div>
+    </div>
+    
+    <div id="hasil" class="result-box">
+      <h3>Hasil Perhitungan</h3>
+      <p>Silakan masukkan jumlah bahan dan klik "Hitung Kandungan"</p>
+    </div>
+    
+    <div class="section-title">
+      <div class="section-icon">📊</div>
+      <h3>Data JSON</h3>
+    </div>
+    <textarea id="jsonArea" placeholder="Data JSON akan muncul di sini..."></textarea>
+    <button onclick="copyJSON()">📋 Salin JSON</button>
+  </div>
+  
+  <footer>
+    <p>Kalkulator Racikan Pupuk AB Mix &copy; 2023 | Untuk pertanian presisi</p>
+  </footer>
+
+  <script>
+    // Bahan pupuk dengan nama lebih jelas
+    const bahan = [
+      { 
+        nama: "Kalium Klorida (KCl)", 
+        deskripsi: "Sumber kalium utama",
+        n: 0, p: 0, k: 60, s: 0, mg: 0, ca: 0, bagian: "A" 
+      },
+      { 
+        nama: "Kalium Sulfat (K₂SO₄)", 
+        deskripsi: "Sumber kalium dan sulfur",
+        n: 0, p: 0, k: 52, s: 18, mg: 0, ca: 0, bagian: "A" 
+      },
+      { 
+        nama: "Mono Kalium Fosfat (MKP)", 
+        deskripsi: "Sumber fosfor dan kalium",
+        n: 0, p: 52, k: 34, s: 0, mg: 0, ca: 0, bagian: "A" 
+      },
+      { 
+        nama: "Magnesium Sulfat (MgSO₄)", 
+        deskripsi: "Sumber magnesium dan sulfur",
+        n: 0, p: 0, k: 0, s: 13, mg: 16, ca: 0, bagian: "A" 
+      },
+      { 
+        nama: "Mono Amonium Fosfat (MAP)", 
+        deskripsi: "Sumber nitrogen dan fosfor",
+        n: 12, p: 61, k: 0, s: 0, mg: 0, ca: 0, bagian: "A" 
+      },
+      { 
+        nama: "Kalsium Nitrat (Ca(NO₃)₂)", 
+        deskripsi: "Sumber kalsium dan nitrogen",
+        n: 15.5, p: 0, k: 0, s: 0, mg: 0, ca: 26, bagian: "B" 
+      },
+      { 
+        nama: "Kalium Nitrat (KNO₃)", 
+        deskripsi: "Sumber nitrogen dan kalium",
+        n: 13, p: 0, k: 46, s: 0, mg: 0, ca: 0, bagian: "B" 
+      },
+    ];
+
+    // Preset yang lebih ideal berdasarkan fase tanaman
+    let presetData = {
+      vegetatif_semai: {
+        name: "Vegetatif Semai",
+        description: "Formula untuk fase persemaian, fokus pada perkembangan akar dan daun awal",
+        values: [0, 0, 80, 40, 100, 120, 80]
+      },
+      vegetatif_pembesaran: {
+        name: "Vegetatif Pembesaran",
+        description: "Formula untuk pertumbuhan vegetatif maksimal (daun dan batang)",
+        values: [140, 0, 160, 50, 100, 180, 180]
+      },
+      generatif_bunga: {
+        name: "Generatif Bunga",
+        description: "Formula untuk merangsang pembungaan",
+        values: [40, 70, 160, 40, 100, 180, 160]
+      },
+      generatif_pembuahan: {
+        name: "Generatif Pembentukan Buah",
+        description: "Formula untuk fase pembentukan buah awal",
+        values: [30, 80, 180, 30, 90, 160, 170]
+      },
+      generatif_pembesaran_buah: {
+        name: "Generatif Pembesaran Buah",
+        description: "Formula untuk pembesaran buah",
+        values: [20, 90, 200, 30, 80, 150, 160]
+      },
+      sayuran_daun: {
+        name: "Sayuran Daun",
+        description: "Formula khusus untuk sayuran berdaun (sawi, kangkung, bayam)",
+        values: [130, 0, 130, 40, 80, 150, 130]
+      }
+    };
+
+    // Inisialisasi tabel
+    const tbodyA = document.getElementById("tbodyA");
+    const tbodyB = document.getElementById("tbodyB");
+    bahan.forEach((b, i) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td><strong>${b.nama}</strong><br><small>${b.deskripsi}</small></td>
+        <td>${b.n}</td>
+        <td>${b.p}</td>
+        <td>${b.k}</td>
+        <td>${b.s}</td>
+        <td>${b.mg}</td>
+        <td>${b.ca}</td>
+        <td><input type="number" value="0" min="0" step="1" id="bahan${i}" /></td>
+      `;
+      (b.bagian === "A" ? tbodyA : tbodyB).appendChild(row);
+    });
+
+    // Fungsi untuk memuat preset
+    function loadPreset() {
+      const preset = document.getElementById("preset").value;
+      if (preset !== "custom" && presetData[preset]) {
+        presetData[preset].values.forEach((val, i) => {
+          document.getElementById(`bahan${i}`).value = val;
+        });
+        hitung();
+        
+        // Tampilkan info preset
+        document.getElementById("hasil").innerHTML = `
+          <h3>Menggunakan Preset: ${presetData[preset].name}</h3>
+          <p>${presetData[preset].description}</p>
+          <p>Silakan klik "Hitung Kandungan" untuk melihat hasil</p>
+        `;
+      }
+    }
+
+    // Fungsi untuk import preset dari file
+    function importPresetFile() {
+      const fileInput = document.getElementById("presetFile");
+      const file = fileInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          try {
+            const imported = JSON.parse(e.target.result);
+            for (const key in imported) {
+              presetData[key] = imported[key];
+            }
+            alert("Preset berhasil diimpor!");
+            
+            // Perbarui dropdown
+            const presetSelect = document.getElementById("preset");
+            // Hapus semua opsi kecuali custom
+            while (presetSelect.options.length > 1) {
+              presetSelect.remove(1);
+            }
+            // Tambahkan preset yang baru diimpor
+            for (const key in presetData) {
+              const option = document.createElement("option");
+              option.value = key;
+              option.textContent = presetData[key].name;
+              presetSelect.appendChild(option);
+            }
+          } catch (err) {
+            alert("Gagal mengimpor preset: " + err.message);
+          }
+        };
+        reader.readAsText(file);
+      }
+    }
+
+    // Fungsi untuk export preset
+    function exportPreset() {
+      const dataStr = JSON.stringify(presetData, null, 2);
+      const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+      const exportFileName = 'abmix_presets.json';
+      
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportFileName);
+      document.body.appendChild(linkElement);
+      linkElement.click();
+      document.body.removeChild(linkElement);
+    }
+
+    // Fungsi hitung kandungan
+    function hitung() {
+      let total = { n: 0, p: 0, k: 0, s: 0, mg: 0, ca: 0 };
+      let totalGram = 0;
+      let gramValues = [];
+      
+      bahan.forEach((b, i) => {
+        const g = parseFloat(document.getElementById(`bahan${i}`).value) || 0;
+        gramValues.push(g);
+        total.n += b.n * g / 100;
+        total.p += b.p * g / 100;
+        total.k += b.k * g / 100;
+        total.s += b.s * g / 100;
+        total.mg += b.mg * g / 100;
+        total.ca += b.ca * g / 100;
+        totalGram += g;
+      });
+      
+      const ppmFactor = 1000 / totalGram;
+      const hasil = `
+        <h3>Hasil Perhitungan</h3>
+        <p><strong>Kandungan Total per Liter Larutan:</strong></p>
+        <table>
+          <tr>
+            <th>Nutrisi</th>
+            <th>Gram</th>
+            <th>ppm</th>
+            <th>Keterangan</th>
+          </tr>
+          <tr>
+            <td>Nitrogen (N)</td>
+            <td>${total.n.toFixed(2)} g</td>
+            <td>${(total.n * ppmFactor).toFixed(0)} ppm</td>
+            <td>Pertumbuhan vegetatif</td>
+          </tr>
+          <tr>
+            <td>Fosfor (P₂O₅)</td>
+            <td>${total.p.toFixed(2)} g</td>
+            <td>${(total.p * ppmFactor).toFixed(0)} ppm</td>
+            <td>Perkembangan akar & bunga</td>
+          </tr>
+          <tr>
+            <td>Kalium (K₂O)</td>
+            <td>${total.k.toFixed(2)} g</td>
+            <td>${(total.k * ppmFactor).toFixed(0)} ppm</td>
+            <td>Pembungaan & ketahanan</td>
+          </tr>
+          <tr>
+            <td>Sulfur (S)</td>
+            <td>${total.s.toFixed(2)} g</td>
+            <td>${(total.s * ppmFactor).toFixed(0)} ppm</td>
+            <td>Pembentukan protein</td>
+          </tr>
+          <tr>
+            <td>Magnesium (MgO)</td>
+            <td>${total.mg.toFixed(2)} g</td>
+            <td>${(total.mg * ppmFactor).toFixed(0)} ppm</td>
+            <td>Klorofil & fotosintesis</td>
+          </tr>
+          <tr>
+            <td>Kalsium (CaO)</td>
+            <td>${total.ca.toFixed(2)} g</td>
+            <td>${(total.ca * ppmFactor).toFixed(0)} ppm</td>
+            <td>Dinding sel & struktur tanaman</td>
+          </tr>
+        </table>
+        <p><strong>Total larutan:</strong> ${totalGram.toFixed(0)} g dalam 1L air</p>
+        <p><strong>EC Perkiraan:</strong> ${(totalGram/700).toFixed(2)} mS/cm</p>
+      `;
+      document.getElementById("hasil").innerHTML = hasil;
+      
+      // Simpan data untuk export
+      currentData = {
+        gramValues: gramValues,
+        totalGram: totalGram,
+        nutrients: {
+          n: total.n,
+          p: total.p,
+          k: total.k,
+          s: total.s,
+          mg: total.mg,
+          ca: total.ca
+        }
+      };
+    }
+
+    // Fungsi export data perhitungan
+    function exportJSON() {
+      if (!currentData) {
+        alert("Silakan hitung kandungan terlebih dahulu");
+        return;
+      }
+      
+      const data = {
+        bahan: bahan.map((b, i) => ({
+          nama: b.nama,
+          gram: parseFloat(document.getElementById(`bahan${i}`).value) || 0
+        })),
+        hasil: currentData
+      };
+      
+      const dataStr = JSON.stringify(data, null, 2);
+      document.getElementById("jsonArea").value = dataStr;
+      
+      // Download otomatis
+      const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+      const exportFileName = 'abmix_calculator_data.json';
+      
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportFileName);
+      document.body.appendChild(linkElement);
+      linkElement.click();
+      document.body.removeChild(linkElement);
+    }
+
+    // Fungsi import data perhitungan
+    function importDataFile() {
+      const fileInput = document.getElementById("dataFile");
+      const file = fileInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          try {
+            const imported = JSON.parse(e.target.result);
+            
+            // Set nilai bahan
+            imported.bahan.forEach((b, i) => {
+              if (i < bahan.length) {
+                document.getElementById(`bahan${i}`).value = b.gram;
+              }
+            });
+            
+            // Hitung ulang
+            hitung();
+            
+            // Tampilkan hasil
+            document.getElementById("jsonArea").value = JSON.stringify(imported, null, 2);
+            
+            alert("Data berhasil diimpor dan dihitung ulang");
+          } catch (err) {
+            alert("Gagal mengimpor data: " + err.message);
+          }
+        };
+        reader.readAsText(file);
+      }
+    }
+
+    // Fungsi untuk menyalin JSON ke clipboard
+    function copyJSON() {
+      const jsonArea = document.getElementById("jsonArea");
+      jsonArea.select();
+      document.execCommand("copy");
+      alert("JSON telah disalin ke clipboard!");
+    }
+
+    // Inisialisasi variabel
+    let currentData = null;
+    
+    // Load pertama kali
+    hitung();
+  </script>
+</body>
+</html>
