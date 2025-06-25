@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Kalkulator Pupuk AB Mix Lengkap</title>
+  <style>
+    /* Gaya CSS sebelumnya dipertahankan */
+    /* Ditambahkan style untuk tabel mikronutrien */
+    .micro-table {
+      margin-top: 20px;
+      background-color: #f0f9eb;
+      border-radius: 8px;
+      padding: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Kalkulator Racikan Pupuk AB Mix</h1>
+    
+    <!-- Bagian preset dan input tetap sama -->
+    
+    <div class="section-title">
+      <div class="section-icon">🧪</div>
+      <h2>Komposisi Pupuk</h2>
+    </div>
+    
+    <!-- Tabel Bagian A dan B tetap sama -->
+    
+    <div class="button-group">
+      <button onclick="hitung()">🧮 Hitung Kandungan</button>
+      <!-- Tombol lainnya tetap sama -->
+    </div>
+    
+    <div id="hasil" class="result-box">
+      <h3>Hasil Perhitungan</h3>
+      <p>Silakan masukkan jumlah bahan dan klik "Hitung Kandungan"</p>
+    </div>
+    
+    <!-- Bagian JSON tetap sama -->
+  </div>
+
+  <script>
+    // Bahan pupuk diperbarui dengan tambahan baru
+    const bahan = [
+      { 
+        nama: "Kalium Klorida (KCl)", 
+        deskripsi: "Sumber kalium utama",
+        n: 0, p: 0, k: 60, s: 0, mg: 0, ca: 0, 
+        fe:0, mn:0, zn:0, cu:0, b:0, mo:0,
+        bagian: "A" 
+      },
+      { 
+        nama: "Kalium Sulfat (K₂SO₄)", 
+        deskripsi: "Sumber kalium dan sulfur",
+        n: 0, p: 0, k: 52, s: 18, mg: 0, ca: 0,
+        fe:0, mn:0, zn:0, cu:0, b:0, mo:0,
+        bagian: "A" 
+      },
+      { 
+        nama: "Mono Kalium Fosfat (MKP)", 
+        deskripsi: "Sumber fosfor dan kalium",
+        n: 0, p: 52, k: 34, s: 0, mg: 0, ca: 0,
+        fe:0, mn:0, zn:0, cu:0, b:0, mo:0,
+        bagian: "A" 
+      },
+      { 
+        nama: "Magnesium Sulfat (MgSO₄)", 
+        deskripsi: "Sumber magnesium dan sulfur",
+        n: 0, p: 0, k: 0, s: 13, mg: 16, ca: 0,
+        fe:0, mn:0, zn:0, cu:0, b:0, mo:0,
+        bagian: "A" 
+      },
+      { 
+        nama: "Mono Amonium Fosfat (MAP)", 
+        deskripsi: "Sumber nitrogen dan fosfor",
+        n: 12, p: 61, k: 0, s: 0, mg: 0, ca: 0,
+        fe:0, mn
