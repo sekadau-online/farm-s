@@ -75,4 +75,240 @@
         nama: "Mono Amonium Fosfat (MAP)", 
         deskripsi: "Sumber nitrogen dan fosfor",
         n: 12, p: 61, k: 0, s: 0, mg: 0, ca: 0,
-        fe:0, mn
+        fe:0, mn:0, zn:0, cu:0, b:0, mo:0,
+        bagian: "A" 
+      },
+      { 
+        nama: "Kalsium Nitrat (Ca(NO₃)₂)", 
+        deskripsi: "Sumber kalsium dan nitrogen",
+        n: 15.5, p: 0, k: 0, s: 0, mg: 0, ca: 26,
+        fe:0, mn:0, zn:0, cu:0, b:0, mo:0,
+        bagian: "B" 
+      },
+      { 
+        nama: "Kalium Nitrat (KNO₃)", 
+        deskripsi: "Sumber nitrogen dan kalium",
+        n: 13, p: 0, k: 46, s: 0, mg: 0, ca: 0,
+        fe:0, mn:0, zn:0, cu:0, b:0, mo:0,
+        bagian: "B" 
+      },
+      { 
+        nama: "Ammonium Nitrat (NH₄NO₃)", 
+        deskripsi: "Sumber nitrogen amonium",
+        n: 34.5, p: 0, k: 0, s: 0, mg: 0, ca: 0,
+        fe:0, mn:0, zn:0, cu:0, b:0, mo:0,
+        bagian: "B" 
+      },
+      { 
+        nama: "Premix Mikronutrien", 
+        deskripsi: "Fe, Mn, Zn, Cu, B, Mo",
+        n: 0, p: 0, k: 0, s: 0, mg: 0, ca: 0,
+        fe: 5, mn: 2.5, zn: 1, cu: 0.5, b: 1.5, mo: 0.05,
+        bagian: "A" 
+      },
+      { 
+        nama: "Asam Fosfat (H₃PO₄)", 
+        deskripsi: "Sumber fosfor dan pengatur pH",
+        n: 0, p: 54, k: 0, s: 0, mg: 0, ca: 0,
+        fe:0, mn:0, zn:0, cu:0, b:0, mo:0,
+        bagian: "A" 
+      }
+    ];
+
+    // Preset dengan formula yang lebih akurat
+    let presetData = {
+      vegetatif_semai: {
+        name: "Vegetatif Semai",
+        description: "Formula untuk fase persemaian, fokus pada perkembangan akar dan daun awal",
+        values: [0, 0, 80, 40, 100, 120, 80, 20, 5, 0]
+      },
+      vegetatif_pembesaran: {
+        name: "Vegetatif Pembesaran",
+        description: "Formula untuk pertumbuhan vegetatif maksimal (daun dan batang)",
+        values: [140, 0, 160, 50, 100, 180, 180, 30, 8, 0]
+      },
+      generatif_bunga: {
+        name: "Generatif Bunga",
+        description: "Formula untuk merangsang pembungaan",
+        values: [40, 70, 160, 40, 100, 180, 160, 10, 10, 5]
+      },
+      generatif_pembuahan: {
+        name: "Generatif Pembentukan Buah",
+        description: "Formula untuk fase pembentukan buah awal",
+        values: [30, 80, 180, 30, 90, 160, 170, 15, 12, 0]
+      },
+      generatif_pembesaran_buah: {
+        name: "Generatif Pembesaran Buah",
+        description: "Formula untuk pembesaran buah",
+        values: [20, 90, 200, 30, 80, 150, 160, 20, 15, 0]
+      },
+      sayuran_daun: {
+        name: "Sayuran Daun",
+        description: "Formula khusus untuk sayuran berdaun (sawi, kangkung, bayam)",
+        values: [130, 0, 130, 40, 80, 150, 130, 25, 10, 0]
+      }
+    };
+
+    // Inisialisasi tabel dengan bahan baru
+    const tbodyA = document.getElementById("tbodyA");
+    const tbodyB = document.getElementById("tbodyB");
+    bahan.forEach((b, i) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td><strong>${b.nama}</strong><br><small>${b.deskripsi}</small></td>
+        <td>${b.n}</td>
+        <td>${b.p}</td>
+        <td>${b.k}</td>
+        <td>${b.s}</td>
+        <td>${b.mg}</td>
+        <td>${b.ca}</td>
+        <td><input type="number" value="0" min="0" step="1" id="bahan${i}" /></td>
+      `;
+      (b.bagian === "A" ? tbodyA : tbodyB).appendChild(row);
+    });
+
+    // Fungsi hitung diperbarui untuk mikronutrien
+    function hitung() {
+      let total = { 
+        n: 0, p: 0, k: 0, s: 0, mg: 0, ca: 0,
+        fe: 0, mn: 0, zn: 0, cu: 0, b: 0, mo: 0
+      };
+      let totalGram = 0;
+      let gramValues = [];
+      
+      bahan.forEach((b, i) => {
+        const g = parseFloat(document.getElementById(`bahan${i}`).value) || 0;
+        gramValues.push(g);
+        total.n += b.n * g / 100;
+        total.p += b.p * g / 100;
+        total.k += b.k * g / 100;
+        total.s += b.s * g / 100;
+        total.mg += b.mg * g / 100;
+        total.ca += b.ca * g / 100;
+        total.fe += (b.fe || 0) * g / 100;
+        total.mn += (b.mn || 0) * g / 100;
+        total.zn += (b.zn || 0) * g / 100;
+        total.cu += (b.cu || 0) * g / 100;
+        total.b += (b.b || 0) * g / 100;
+        total.mo += (b.mo || 0) * g / 100;
+        totalGram += g;
+      });
+      
+      const ppmFactor = 1000 / totalGram;
+      
+      // Hasil makronutrien
+      let hasilHTML = `
+        <h3>Hasil Perhitungan</h3>
+        <p><strong>Makronutrien per Liter Larutan:</strong></p>
+        <table>
+          <tr>
+            <th>Nutrisi</th>
+            <th>Gram</th>
+            <th>ppm</th>
+            <th>Keterangan</th>
+          </tr>
+          <tr>
+            <td>Nitrogen (N)</td>
+            <td>${total.n.toFixed(2)} g</td>
+            <td>${(total.n * ppmFactor).toFixed(0)} ppm</td>
+            <td>Pertumbuhan vegetatif</td>
+          </tr>
+          <tr>
+            <td>Fosfor (P₂O₅)</td>
+            <td>${total.p.toFixed(2)} g</td>
+            <td>${(total.p * ppmFactor).toFixed(0)} ppm</td>
+            <td>Perkembangan akar & bunga</td>
+          </tr>
+          <tr>
+            <td>Kalium (K₂O)</td>
+            <td>${total.k.toFixed(2)} g</td>
+            <td>${(total.k * ppmFactor).toFixed(0)} ppm</td>
+            <td>Pembungaan & ketahanan</td>
+          </tr>
+          <tr>
+            <td>Sulfur (S)</td>
+            <td>${total.s.toFixed(2)} g</td>
+            <td>${(total.s * ppmFactor).toFixed(0)} ppm</td>
+            <td>Pembentukan protein</td>
+          </tr>
+          <tr>
+            <td>Magnesium (MgO)</td>
+            <td>${total.mg.toFixed(2)} g</td>
+            <td>${(total.mg * ppmFactor).toFixed(0)} ppm</td>
+            <td>Klorofil & fotosintesis</td>
+          </tr>
+          <tr>
+            <td>Kalsium (CaO)</td>
+            <td>${total.ca.toFixed(2)} g</td>
+            <td>${(total.ca * ppmFactor).toFixed(0)} ppm</td>
+            <td>Dinding sel & struktur tanaman</td>
+          </tr>
+        </table>
+      `;
+      
+      // Hasil mikronutrien
+      hasilHTML += `
+        <div class="micro-table">
+          <p><strong>Mikronutrien per Liter Larutan:</strong></p>
+          <table>
+            <tr>
+              <th>Nutrisi</th>
+              <th>Gram</th>
+              <th>ppm</th>
+              <th>Keterangan</th>
+            </tr>
+            <tr>
+              <td>Besi (Fe)</td>
+              <td>${total.fe.toFixed(4)} g</td>
+              <td>${(total.fe * ppmFactor).toFixed(2)} ppm</td>
+              <td>Pembentukan klorofil</td>
+            </tr>
+            <tr>
+              <td>Mangan (Mn)</td>
+              <td>${total.mn.toFixed(4)} g</td>
+              <td>${(total.mn * ppmFactor).toFixed(2)} ppm</td>
+              <td>Aktivator enzim</td>
+            </tr>
+            <tr>
+              <td>Zinc (Zn)</td>
+              <td>${total.zn.toFixed(4)} g</td>
+              <td>${(total.zn * ppmFactor).toFixed(2)} ppm</td>
+              <td>Pertumbuhan dan pembungaan</td>
+            </tr>
+            <tr>
+              <td>Tembaga (Cu)</td>
+              <td>${total.cu.toFixed(4)} g</td>
+              <td>${(total.cu * ppmFactor).toFixed(2)} ppm</td>
+              <td>Reproduksi dan respirasi</td>
+            </tr>
+            <tr>
+              <td>Boron (B)</td>
+              <td>${total.b.toFixed(4)} g</td>
+              <td>${(total.b * ppmFactor).toFixed(2)} ppm</td>
+              <td>Pembentukan dinding sel</td>
+            </tr>
+            <tr>
+              <td>Molibdenum (Mo)</td>
+              <td>${total.mo.toFixed(4)} g</td>
+              <td>${(total.mo * ppmFactor).toFixed(2)} ppm</td>
+              <td>Fiksasi nitrogen</td>
+            </tr>
+          </table>
+        </div>
+        <p><strong>Total larutan:</strong> ${totalGram.toFixed(0)} g dalam 1L air</p>
+        <p><strong>EC Perkiraan:</strong> ${(totalGram/700).toFixed(2)} mS/cm</p>
+        <p><strong>Rasio N-P-K:</strong> ${(total.n/total.n).toFixed(0)}-${(total.p/total.n).toFixed(1)}-${(total.k/total.n).toFixed(1)}</p>
+      `;
+      
+      document.getElementById("hasil").innerHTML = hasilHTML;
+      currentData = {
+        gramValues: gramValues,
+        totalGram: totalGram,
+        nutrients: total
+      };
+    }
+
+    // ... Fungsi lainnya tetap sama
+  </script>
+</body>
+</html>
