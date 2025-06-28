@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator Pupuk AB Mix - Status EC Fixed</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #e6f7e6, #d1ebff);
+      color: #333;
+      line-height: 1.6;
+      padding: 15px;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 100%;
+      margin: 0 auto;
+    }
+    
+    header {
+      text-align: center;
+      padding: 20px;
+      background: linear-gradient(to right, #2c6e3c, #3d8b55);
+      color: white;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+    
+    .card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #e0f0e7;
+    }
+    
+    .section-icon {
+      background: linear-gradient(to bottom, #2c6e3c, #245530);
+      color: white;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    
+    h2 {
+      color: #2c6e3c;
+      font-size: 1.5rem;
+    }
+    
+    h3 {
+      color: #3d8b55;
+      font-size: 1.3rem;
+      margin: 20px 0 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed #d1e7dd;
+    }
+    
+    .water-input-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: linear-gradient(to right, #e6f7ff, #d1ebff);
+      padding: 15px;
+      border-radius: 12px;
+      margin: 20px 0;
+    }
+    
+    .water-input-container label {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #2c6e3c;
+    }
+    
+    .water-input {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .water-input input {
+      flex: 1;
+      padding: 14px;
+      border: 2px solid #4a8da8;
+      border-radius: 10px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      text-align: center;
+      background: white;
+    }
+    
+    .phase-select {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin: 20px 0;
+    }
+    
+    .phase-select label {
+      font-weight: 600;
+      color: #2c6e3c;
+    }
+    
+    .phase-select select {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: 2px solid #c2e0d0;
+      font-size: 16px;
+      background: white;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      font-size: 0.9rem;
+    }
+    
+    th, td {
+      padding: 12px 10px;
+      text-align: center;
+      border: 1px solid #d1e7dd;
+    }
+    
+    th {
+      background: linear-gradient(to bottom, #2c6e3c, #245530);
+      color: white;
+      font-weight: 600;
+    }
+    
+    input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #c2e0d0;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 600;
+      background: white;
+    }
+    
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 20px 0;
+    }
+    
+    button {
+      background: linear-gradient(to bottom, #2c6e3c, #245530);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    button.secondary {
+      background: linear-gradient(to bottom, #4a8da8, #3f7a91);
+    }
+    
+    .result-box {
+      background: linear-gradient(to right, #f0f9eb, #e6f7e6);
+      border-left: 5px solid #2c6e3c;
+      padding: 20px;
+      border-radius: 0 15px 15px 0;
+      margin: 25px 0;
+    }
+    
+    .ec-guide {
+      background: linear-gradient(to right, #e6f7ff, #d1ebff);
+      border-left: 5px solid #4a8da8;
+      padding: 20px;
+      border-radius: 0 15px 15px 0;
+      margin: 25px 0;
+    }
+    
+    .nutrient-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+    
+    .nutrient-card {
+      background: white;
+      border-radius: 12px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border-top: 5px solid #2c6e3c;
+    }
+    
+    .nutrient-value {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #2c6e3c;
+      margin: 10px 0;
+    }
+    
+    .nutrient-name {
+      font-size: 1.1rem;
+      color: #3d8b55;
+      font-weight: 600;
+    }
+    
+    .ec-status-card {
+      background: white;
+      border-radius: 12px;
+      padding: 15px;
+      margin: 20px 0;
+      border-left: 5px solid #4a8da8;
+    }
+    
+    .ec-value {
+      font-size: 2rem;
+      font-weight: bold;
+      text-align: center;
+      margin: 10px 0;
+    }
+    
+    .ec-ideal {
+      text-align: center;
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      color: #3d8b55;
+    }
+    
+    .ec-status {
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: bold;
+      padding: 10px;
+      border-radius: 8px;
+      margin: 15px 0;
+    }
+    
+    .ec-good {
+      background-color: #e6f7e6;
+      color: #2c6e3c;
+    }
+    
+    .ec-low {
+      background-color: #e6f7ff;
+      color: #4a8da8;
+    }
+    
+    .ec-high {
+      background-color: #fce8e8;
+      color: #c94c4c;
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      color: #6c757d;
+      font-size: 14px;
+      border-top: 1px solid #e0f0e7;
+    }
+    
+    .volume-info {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: #f8fcf9;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+      border: 1px solid #d1e7dd;
+    }
+    
+    .volume-info .value {
+      font-weight: bold;
+      color: #2c6e3c;
+      font-size: 1.2rem;
+    }
+    
+    @media (min-width: 768px) {
+      .button-group {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+      
+      .button-group button {
+        min-width: 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><i class="fas fa-calculator"></i> Kalkulator Pupuk AB Mix</h1>
+      <p>Hitung komposisi nutrisi dan EC dengan volume air yang disesuaikan</p>
+    </header>
+    
+    <div class="card">
+      <div class="section-title">
+        <div class="section-icon"><i class="fas fa-tint"></i></div>
+        <h2>Pengaturan Volume Air</h2>
+      </div>
+      
+      <div class="water-input-container">
+        <label>Volume Air yang Digunakan:</label>
+        <div class="water-input">
+          <input type="number" id="volumeAir" value="1" min="0.1" step="0.1" inputmode="decimal" />
+          <span class="unit">Liter</span>
+        </div>
+      </div>
+      
+      <div class="phase-select">
+        <label for="faseTanaman">Pilih Fase Tanaman:</label>
+        <select id="faseTanaman">
+          <option value="semai">🌱 Semai</option>
+          <option value="vegetatif">🌿 Vegetatif</option>
+          <option value="generatif">🌸 Generatif</option>
+          <option value="sayuran_daun">🥬 Sayuran Daun</option>
+        </select>
+      </div>
+      
+      <div class="volume-info">
+        <p>Volume air saat ini: <span class="value">1 Liter</span></p>
+        <p>Perhitungan nutrisi akan disesuaikan berdasarkan volume air ini</p>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="section-title">
+        <div class="section-icon"><i class="fas fa-flask"></i></div>
+        <h2>Komposisi Pupuk</h2>
+      </div>
+      
+      <h3><span class="section-icon">A</span> Bagian A</h3>
+      <div style="overflow-x: auto;">
+        <table id="tableA">
+          <thead>
+            <tr>
+              <th>Bahan</th>
+              <th>N %</th>
+              <th>P₂O₅ %</th>
+              <th>K₂O %</th>
+              <th>S %</th>
+              <th>MgO %</th>
+              <th>CaO %</th>
+              <th>Jumlah (g)</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyA"></tbody>
+        </table>
+      </div>
+      
+      <h3><span class="section-icon">B</span> Bagian B</h3>
+      <div style="overflow-x: auto;">
+        <table id="tableB">
+          <thead>
+            <tr>
+              <th>Bahan</th>
+              <th>N %</th>
+              <th>P₂O₅ %</th>
+              <th>K₂O %</th>
+              <th>S %</th>
+              <th>MgO %</th>
+              <th>CaO %</th>
+              <th>Jumlah (g)</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyB"></tbody>
+        </table>
+      </div>
+      
+      <div class="button-group">
+        <button onclick="hitung()"><i class="fas fa-calculator"></i> Hitung Kandungan</button>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="section-title">
+        <div class="section-icon"><i class="fas fa-chart-bar"></i></div>
+        <h2>Hasil Perhitungan</h2>
+      </div>
+      
+      <div id="hasil">
+        <div class="result-box">
+          <h3><i class="fas fa-tint"></i> Hasil Perhitungan untuk 1 Liter Air</h3>
+          
+          <div class="volume-info">
+            <p><i class="fas fa-weight-hanging"></i> Total pupuk yang digunakan: <span class="value">0 gram</span></p>
+            <p><i class="fas fa-flask"></i> Konsentrasi: <span class="value">0 g/L</span></p>
+          </div>
+          
+          <div class="nutrient-summary">
+            <div class="nutrient-card">
+              <div class="nutrient-name"><i class="fas fa-leaf"></i> Nitrogen (N)</div>
+              <div class="nutrient-value">0 ppm</div>
+              <div>0.00 g</div>
+              <div><small>Pertumbuhan vegetatif</small></div>
+            </div>
+            
+            <div class="nutrient-card">
+              <div class="nutrient-name"><i class="fas fa-root"></i> Fosfor (P₂O₅)</div>
+              <div class="nutrient-value">0 ppm</div>
+              <div>0.00 g</div>
+              <div><small>Perkembangan akar & bunga</small></div>
+            </div>
+            
+            <div class="nutrient-card">
+              <div class="nutrient-name"><i class="fas fa-apple-alt"></i> Kalium (K₂O)</div>
+              <div class="nutrient-value">0 ppm</div>
+              <div>0.00 g</div>
+              <div><small>Pembungaan & ketahanan</small></div>
+            </div>
+            
+            <div class="nutrient-card">
+              <div class="nutrient-name"><i class="fas fa-seedling"></i> Total Nutrisi</div>
+              <div class="nutrient-value">0 g</div>
+              <div>dalam 1 L air</div>
+            </div>
+          </div>
+          
+          <h3><i class="fas fa-bolt"></i> Electrical Conductivity (EC)</h3>
+          <div class="ec-status-card">
+            <div class="ec-value">0.00 mS/cm</div>
+            <div class="ec-ideal">EC Ideal: -</div>
+            <div class="ec-status ec-good">Status: Masukkan data</div>
+            
+            <table style="margin-top: 15px;">
+              <tr>
+                <th>Parameter</th>
+                <th>Nilai</th>
+                <th>Keterangan</th>
+              </tr>
+              <tr>
+                <td>EC Perkiraan</td>
+                <td>0.00 mS/cm</td>
+                <td>(Total gram pupuk / Volume air) × 0.65</td>
+              </tr>
+              <tr>
+                <td>TDS Perkiraan</td>
+                <td>0 ppm</td>
+                <td>EC × 640</td>
+              </tr>
+            </table>
+          </div>
+          
+          <p style="margin-top: 20px;"><i class="fas fa-info-circle"></i> <small>Nilai perhitungan EC dan TDS adalah perkiraan. Pengukuran aktual menggunakan alat EC meter dianjurkan.</small></p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="ec-guide">
+      <h3><i class="fas fa-book"></i> Panduan Electrical Conductivity (EC)</h3>
+      <p>EC (Electrical Conductivity) mengukur kemampuan larutan nutrisi menghantarkan listrik, yang menunjukkan konsentrasi garam mineral terlarut.</p>
+      
+      <p><strong>Rumus perhitungan:</strong> EC (mS/cm) = (Total Gram Pupuk / Volume Air) × 0.65</p>
+      <p><strong>Konversi ke TDS:</strong> TDS (ppm) = EC × 640</p>
+      
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Fase Tanaman</th>
+              <th>EC Ideal (mS/cm)</th>
+              <th>TDS Ideal (ppm)</th>
+              <th>Keterangan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><i class="fas fa-seedling"></i> Semai</td>
+              <td>0.8 - 1.2</td>
+              <td>500 - 750</td>
+              <td>Akar muda sensitif, perlu konsentrasi rendah</td>
+            </tr>
+            <tr>
+              <td><i class="fas fa-leaf"></i> Vegetatif</td>
+              <td>1.5 - 2.0</td>
+              <td>950 - 1250</td>
+              <td>Pertumbuhan maksimal daun dan batang</td>
+            </tr>
+            <tr>
+              <td><i class="fas fa-spa"></i> Generatif</td>
+              <td>2.0 - 2.8</td>
+              <td>1250 - 1750</td>
+              <td>Fokus pembungaan dan pembesaran buah</td>
+            </tr>
+            <tr>
+              <td><i class="fas fa-carrot"></i> Sayuran Daun</td>
+              <td>1.2 - 1.8</td>
+              <td>750 - 1150</td>
+              <td>Pertumbuhan daun optimal</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <footer>
+      <p><i class="fas fa-user"></i> Muhammad Kahfi Al Fauzan</p>
+      <p><i class="fas fa-copyright"></i> Kalkulator Racikan Pupuk AB Mix | Untuk pertanian presisi</p>
+      <p><i class="fas fa-heart"></i> Dikembangkan untuk petani hidroponik Indonesia</p>
+    </footer>
+  </div>
+
+  <script>
+    // Bahan pupuk
+    const bahan = [
+      { 
+        nama: "Kalium Klorida (KCl)", 
+        deskripsi: "Sumber kalium utama",
+        n: 0, p: 0, k: 60, s: 0, mg: 0, ca: 0, bagian: "A" 
+      },
+      { 
+        nama: "Kalium Sulfat (K₂SO₄)", 
+        deskripsi: "Sumber kalium dan sulfur",
+        n: 0, p: 0, k: 52, s: 18, mg: 0, ca: 0, bagian: "A" 
+      },
+      { 
+        nama: "Mono Kalium Fosfat (MKP)", 
+        deskripsi: "Sumber fosfor dan kalium",
+        n: 0, p: 52, k: 34, s: 0, mg: 0, ca: 0, bagian: "A" 
+      },
+      { 
+        nama: "Magnesium Sulfat (MgSO₄)", 
+        deskripsi: "Sumber magnesium dan sulfur",
+        n: 0, p: 0, k: 0, s: 13, mg: 16, ca: 0, bagian: "A" 
+      },
+      { 
+        nama: "Mono Amonium Fosfat (MAP)", 
+        deskripsi: "Sumber nitrogen dan fosfor",
+        n: 12, p: 61, k: 0, s: 0, mg: 0, ca: 0, bagian: "A" 
+      },
+      { 
+        nama: "Kalsium Nitrat (Ca(NO₃)₂)", 
+        deskripsi: "Sumber kalsium dan nitrogen",
+        n: 15.5, p: 0, k: 0, s: 0, mg: 0, ca: 26, bagian: "B" 
+      },
+      { 
+        nama: "Kalium Nitrat (KNO₃)", 
+        deskripsi: "Sumber nitrogen dan kalium",
+        n: 13, p: 0, k: 46, s: 0, mg: 0, ca: 0, bagian: "B" 
+      },
+    ];
+
+    // Rekomendasi EC berdasarkan fase tanaman
+    const rekomendasiEC = {
+      semai: { min: 0.8, max: 1.2, name: "Semai" },
+      vegetatif: { min: 1.5, max: 2.0, name: "Vegetatif" },
+      generatif: { min: 2.0, max: 2.8, name: "Generatif" },
+      sayuran_daun: { min: 1.2, max: 1.8, name: "Sayuran Daun" }
+    };
+
+    // Inisialisasi tabel
+    const tbodyA = document.getElementById("tbodyA");
+    const tbodyB = document.getElementById("tbodyB");
+    bahan.forEach((b, i) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td><strong>${b.nama}</strong><br><small style="color: #666; font-size: 0.85em;">${b.deskripsi}</small></td>
+        <td>${b.n}</td>
+        <td>${b.p}</td>
+        <td>${b.k}</td>
+        <td>${b.s}</td>
+        <td>${b.mg}</td>
+        <td>${b.ca}</td>
+        <td><input type="number" value="0" min="0" step="1" id="bahan${i}" inputmode="decimal" /></td>
+      `;
+      (b.bagian === "A" ? tbodyA : tbodyB).appendChild(row);
+    });
+
+    // Fungsi untuk mendapatkan rekomendasi EC
+    function getECRecommendation(ecValue, fase) {
+      const rekom = rekomendasiEC[fase];
+      if (!rekom) return { status: "Tidak Diketahui", color: "gray", class: "" };
+      
+      if (ecValue < rekom.min) {
+        return { 
+          status: "TERLALU RENDAH", 
+          color: "#4a8da8",
+          class: "ec-low",
+          message: `EC sebaiknya ditingkatkan (ideal ${rekom.min}-${rekom.max} mS/cm)`
+        };
+      } else if (ecValue > rekom.max) {
+        return { 
+          status: "TERLALU TINGGI", 
+          color: "#c94c4c",
+          class: "ec-high",
+          message: `EC sebaiknya diturunkan (ideal ${rekom.min}-${rekom.max} mS/cm)`
+        };
+      } else {
+        return { 
+          status: "IDEAL", 
+          color: "#2c6e3c",
+          class: "ec-good",
+          message: `EC dalam rentang ideal (${rekom.min}-${rekom.max} mS/cm)`
+        };
+      }
+    }
+
+    // Fungsi hitung kandungan dengan volume air dinamis
+    function hitung() {
+      // Dapatkan volume air dari input
+      const volumeAir = parseFloat(document.getElementById("volumeAir").value) || 1;
+      const fase = document.getElementById("faseTanaman").value;
+      
+      let total = { n: 0, p: 0, k: 0, s: 0, mg: 0, ca: 0 };
+      let totalGram = 0;
+      
+      bahan.forEach((b, i) => {
+        const g = parseFloat(document.getElementById(`bahan${i}`).value) || 0;
+        total.n += b.n * g / 100;
+        total.p += b.p * g / 100;
+        total.k += b.k * g / 100;
+        total.s += b.s * g / 100;
+        total.mg += b.mg * g / 100;
+        total.ca += b.ca * g / 100;
+        totalGram += g;
+      });
+      
+      // Perhitungan ppm berdasarkan volume air
+      const ppmFactor = 1000 / volumeAir;
+      
+      // Perhitungan EC: (Total Gram Pupuk / Volume Air) × 0.65
+      const ecPerkiraan = (totalGram / volumeAir) * 0.65;
+      
+      // Konversi ke TDS
+      const tdsPerkiraan = ecPerkiraan * 640;
+      
+      // Dapatkan rekomendasi EC
+      const ecRekom = getECRecommendation(ecPerkiraan, fase);
+      const faseName = rekomendasiEC[fase] ? rekomendasiEC[fase].name : "Tidak Diketahui";
+      
+      // Perbarui info volume air
+      document.querySelector('.volume-info p .value').textContent = `${volumeAir} Liter`;
+      
+      const hasil = `
+        <div class="result-box">
+          <h3><i class="fas fa-tint"></i> Hasil Perhitungan untuk ${volumeAir} Liter Air</h3>
+          
+          <div class="volume-info">
+            <p><i class="fas fa-weight-hanging"></i> Total pupuk yang digunakan: <span class="value">${totalGram.toFixed(2)} gram</span></p>
+            <p><i class="fas fa-flask"></i> Konsentrasi: <span class="value">${(totalGram / volumeAir).toFixed(2)} g/L</span></p>
+          </div>
+          
+          <div class="nutrient-summary">
+            <div class="nutrient-card">
+              <div class="nutrient-name"><i class="fas fa-leaf"></i> Nitrogen (N)</div>
+              <div class="nutrient-value">${(total.n * ppmFactor).toFixed(0)} ppm</div>
+              <div>${total.n.toFixed(2)} g</div>
+              <div><small>Pertumbuhan vegetatif</small></div>
+            </div>
+            
+            <div class="nutrient-card">
+              <div class="nutrient-name"><i class="fas fa-root"></i> Fosfor (P₂O₅)</div>
+              <div class="nutrient-value">${(total.p * ppmFactor).toFixed(0)} ppm</div>
+              <div>${total.p.toFixed(2)} g</div>
+              <div><small>Perkembangan akar & bunga</small></div>
+            </div>
+            
+            <div class="nutrient-card">
+              <div class="nutrient-name"><i class="fas fa-apple-alt"></i> Kalium (K₂O)</div>
+              <div class="nutrient-value">${(total.k * ppmFactor).toFixed(0)} ppm</div>
+              <div>${total.k.toFixed(2)} g</div>
+              <div><small>Pembungaan & ketahanan</small></div>
+            </div>
+            
+            <div class="nutrient-card">
+              <div class="nutrient-name"><i class="fas fa-seedling"></i> Total Nutrisi</div>
+              <div class="nutrient-value">${totalGram.toFixed(0)} g</div>
+              <div>dalam ${volumeAir} L air</div>
+            </div>
+          </div>
+          
+          <h3><i class="fas fa-bolt"></i> Electrical Conductivity (EC)</h3>
+          <div class="ec-status-card">
+            <div class="ec-value">${ecPerkiraan.toFixed(2)} mS/cm</div>
+            <div class="ec-ideal">EC Ideal untuk fase ${faseName}: ${rekomendasiEC[fase] ? rekomendasiEC[fase].min + "-" + rekomendasiEC[fase].max + " mS/cm" : "-"}</div>
+            <div class="ec-status ${ecRekom.class}">Status: ${ecRekom.status}</div>
+            <div style="text-align: center; margin: 10px 0; font-size: 1rem; color: ${ecRekom.color}">
+              ${ecRekom.message}
+            </div>
+            
+            <table style="margin-top: 15px;">
+              <tr>
+                <th>Parameter</th>
+                <th>Nilai</th>
+                <th>Keterangan</th>
+              </tr>
+              <tr>
+                <td>EC Perkiraan</td>
+                <td>${ecPerkiraan.toFixed(2)} mS/cm</td>
+                <td>(Total gram pupuk / Volume air) × 0.65</td>
+              </tr>
+              <tr>
+                <td>TDS Perkiraan</td>
+                <td>${tdsPerkiraan.toFixed(0)} ppm</td>
+                <td>EC × 640</td>
+              </tr>
+            </table>
+          </div>
+          
+          <p style="margin-top: 20px;"><i class="fas fa-info-circle"></i> <small>Nilai perhitungan EC dan TDS adalah perkiraan. Pengukuran aktual menggunakan alat EC meter dianjurkan.</small></p>
+        </div>
+      `;
+      document.getElementById("hasil").innerHTML = hasil;
+    }
+
+    // Event listener untuk volume air
+    document.getElementById("volumeAir").addEventListener('input', function() {
+      // Update info volume air
+      const volumeAir = parseFloat(this.value) || 1;
+      document.querySelector('.volume-info p .value').textContent = `${volumeAir} Liter`;
+      
+      // Jika sudah ada perhitungan sebelumnya, hitung ulang
+      hitung();
+    });
+
+    // Event listener untuk fase tanaman
+    document.getElementById("faseTanaman").addEventListener('change', hitung);
+    
+    // Tambahkan event listener untuk semua input bahan
+    bahan.forEach((b, i) => {
+      document.getElementById(`bahan${i}`).addEventListener('input', hitung);
+    });
+    
+    // Hitung pertama kali
+    hitung();
+  </script>
+</body>
+</html>
