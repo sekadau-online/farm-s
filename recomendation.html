@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekomendasi Nutrisi Tanaman - Iklim Khatulistiwa</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #ff9a00, #ff2e00, #ff9a00);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .subtitle {
+            color: #e74c3c;
+            font-size: 1.4rem;
+            max-width: 800px;
+            margin: 0 auto 20px;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.93);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 5px solid #3498db;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+        }
+        
+        .card-important {
+            border-top-color: #e74c3c;
+        }
+        
+        .card-title {
+            display: flex;
+            align-items: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px dashed #eee;
+        }
+        
+        .card-title i {
+            margin-right: 15px;
+            font-size: 1.8rem;
+            color: #3498db;
+        }
+        
+        .card-important .card-title i {
+            color: #e74c3c;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        th {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            text-align: left;
+            padding: 15px;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e9f7fe;
+        }
+        
+        .highlight {
+            background: #fff9db;
+            color: #e67700;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 5px;
+        }
+        
+        .warning {
+            background: #ffe8e8;
+            color: #e03131;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 5px;
+        }
+        
+        .tip {
+            background: #d3f9d8;
+            border-left: 4px solid #2f9e44;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .step-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .step-list li {
+            padding: 12px 0 12px 40px;
+            position: relative;
+            margin-bottom: 10px;
+        }
+        
+        .step-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            background: #3498db;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+        
+        .temp-adjustment {
+            background: #e9f7fe;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: 600;
+        }
+        
+        .formula-card {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .formula-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .phase-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .phase-tab {
+            padding: 12px 20px;
+            background: #e9ecef;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .phase-tab.active {
+            background: #3498db;
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-sun"></i> Rekomendasi Nutrisi Tanaman untuk Iklim Khatulistiwa</h1>
+            <p class="subtitle">Penyesuaian EC dan PPM berdasarkan kondisi suhu tinggi dan radiasi matahari intens</p>
+            <p>Diformulasikan khusus untuk mencegah overdosis pada suhu >30°C</p>
+        </header>
+
+        <div class="content-grid">
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-chart-line"></i> Rekomendasi EC & PPM</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fase Pertumbuhan</th>
+                            <th>EC Target (mS/cm)</th>
+                            <th>Total PPM</th>
+                            <th>Rentang Aman</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Awal Vegetatif</td>
+                            <td>0.4-0.5</td>
+                            <td>200-250</td>
+                            <td class="highlight">▼ 60% dari standar</td>
+                        </tr>
+                        <tr>
+                            <td>Vegetatif Intensif</td>
+                            <td>0.6-0.8</td>
+                            <td>300-400</td>
+                            <td class="highlight">▼ 50% dari standar</td>
+                        </tr>
+                        <tr>
+                            <td>Transisi Generatif</td>
+                            <td>0.8-1.0</td>
+                            <td>400-500</td>
+                            <td class="highlight">▼ 55% dari standar</td>
+                        </tr>
+                        <tr>
+                            <td>Generatif/Pembuahan</td>
+                            <td>1.0-1.2</td>
+                            <td>500-600</td>
+                            <td class="highlight">▼ 65% dari standar</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="temp-adjustment">
+                    <i class="fas fa-temperature-high"></i> Setiap kenaikan 1°C di atas 32°C, turunkan EC tambahan 0.1 mS/cm
+                </div>
+                
+                <div class="tip">
+                    <strong><i class="fas fa-lightbulb"></i> Tip Penting:</strong> Di iklim khatulistiwa, tanaman lebih sensitif terhadap garam karena transpirasi tinggi. 
+                    Formula rendah EC dengan aplikasi sering lebih efektif daripada EC tinggi sekaligus.
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-flask"></i> Formula Nutrisi Khatulistiwa</h2>
+                
+                <div class="phase-tabs">
+                    <div class="phase-tab active" data-phase="vegetative">Vegetatif</div>
+                    <div class="phase-tab" data-phase="generative">Generatif</div>
+                </div>
+                
+                <div class="formula-card" id="vegetative-formula">
+                    <div class="formula-item">
+                        <span>Nitrogen (N)</span>
+                        <span>25 ppm (dari KNO₃, CaNO₃)</span>
+                    </div>
+                    <div class="formula-item">
+                        <span>Kalium (K)</span>
+                        <span>80 ppm (dari K₂SO₄)</span>
+                    </div>
+                    <div class="formula-item">
+                        <span>Kalsium (Ca)</span>
+                        <span>60 ppm (dari CaNO₃)</span>
+                    </div>
+                    <div class="formula-item">
+                        <span>Magnesium (Mg)</span>
+                        <span>30 ppm (dari MgSO₄)</span>
+                    </div>
+                    <div class="formula-item">
+                        <span>Sulfur (S)</span>
+                        <span>40 ppm (dari MgSO₄)</span>
+                    </div>
+                    <div class="formula-item">
+                        <span>Fosfor (P)</span>
+                        <span>15 ppm (dari MKP)</span>
+                    </div>
+                    <div class="formula-item">
+                        <span>Mikronutrien</span>
+                        <span>2-3 ppm (Fe-EDDHA wajib)</span>
+                    </div>
+                </div>
+                
+                <div class="formula-card" id="generative-formula" style="display:none;">
+                    <div class="formula-item">
+                        <span>Nitrogen (N)</span>
+                        <span>20 ppm (dari KNO₃, CaNO₃)</span>
+                    </div>
+                    <div class="formula-item">
+                        <span>Kalium (K)</span>
+                        <span>120 ppm (dari K₂SO₄)</span>
+                    </div>
+                    <div class="formula-item">
+                        <span>Kalsium (Ca)</span>
+                        <span>60 ppm (dari CaNO₃)</span>
+                    </div>
+                    <div class="formula-item">
+                        <span>Magnesium (Mg)</span>
+                        <span>30 ppm (dari MgSO₄)</span>
+                    </div>
+                    <div class="formula-item">
+                        <span>Sulfur (S)</span>
+                        <span>40 ppm (dari MgSO₄)</span>
+                    </div>
+                    <div class="formula-item">
+                        <span>Fosfor (P)</span>
+                        <span>25 ppm (dari MKP)</span>
+                    </div>
+                    <div class="formula-item">
+                        <span>Mikronutrien</span>
+                        <span>2-3 ppm (Fe-EDDHA wajib)</span>
+                    </div>
+                </div>
+                
+                <div class="tip">
+                    <strong><i class="fas fa-skull-crossbones"></i> Peringatan:</strong> Hindari urea/NH₄⁺ >5ppm karena risiko toksisitas amonia di suhu tinggi.
+                    Kalium (K) ditingkatkan untuk mitigasi stres panas.
+                </div>
+            </div>
+
+            <div class="card card-important">
+                <h2 class="card-title"><i class="fas fa-calendar-day"></i> Protokol Aplikasi Harian</h2>
+                <ul class="step-list">
+                    <li><strong>Pagi (06:00-07:00):</strong> Beri larutan nutrisi penuh (EC sesuai fase) dengan volume 20% lebih banyak</li>
+                    <li><strong>Siang (10:00-11:00):</strong> Flushing cepat dengan air bersih (EC 0) 100-200 mL/pot</li>
+                    <li><strong>Sore (15:00-16:00):</strong> Beri larutan nutrisi setengah konsentrasi + asam humat 0.5%</li>
+                    <li><strong>Setiap 3 hari:</strong> Ukur EC zona akar (target 0.8-1.2 mS/cm)</li>
+                    <li><strong>Mingguan:</strong> Flushing menyeluruh dengan volume air = 2x volume media</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-thermometer-half"></i> Teknik Mitigasi Panas</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Teknik</th>
+                            <th>Implementasi</th>
+                            <th>Manfaat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Komposisi Media</td>
+                            <td>Cocopeat 50%, Perlit 30%, Biochar 15%, Vermikulit 5%</td>
+                            <td>Penahan air + aerasi + penyerap garam</td>
+                        </tr>
+                        <tr>
+                            <td>Pendinginan Pot</td>
+                            <td>Lapisi aluminium foil + batang pisang kering</td>
+                            <td>Pantulkan radiasi + insulasi termal</td>
+                        </tr>
+                        <tr>
+                            <td>Naungan</td>
+                            <td>Paranet 40-50% (jam 11-15)</td>
+                            <td>Turunkan suhu 3-5°C</td>
+                        </tr>
+                        <tr>
+                            <td>Penjadwalan</td>
+                            <td>Siram saat suhu < 30°C (pagi/sore)</td>
+                            <td>Hindari stres panas</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-leaf"></i> Deteksi Dini Overdosis</h2>
+                <ul class="step-list">
+                    <li><strong>Daun kaku + dingin:</strong> EC aman</li>
+                    <li><strong>Daun lemas + hangat:</strong> EC terlalu tinggi</li>
+                    <li><strong>Ujung daun kuning pucat:</strong> Overdosis garam</li>
+                    <li><strong>Daun menggulung ke atas:</strong> Stres panas akut</li>
+                    <li><strong>Pertumbuhan terhambat:</strong> Akumulasi garam di zona akar</li>
+                </ul>
+                
+                <div class="tip">
+                    <strong><i class="fas fa-vial"></i> Tes Sederhana:</strong> Campur sampel media dengan air destilasi (1:5), ukur EC. 
+                    Jika >1.5 mS/cm, segera lakukan flushing.
+                </div>
+            </div>
+
+            <div class="card card-important">
+                <h2 class="card-title"><i class="fas fa-first-aid"></i> Action Plan Overdosis</h2>
+                <h3>Tahap Akut (daun mengering):</h3>
+                <ul class="step-list">
+                    <li>Rendam pot dalam air bersih (30 menit)</li>
+                    <li>Semprot daun dengan campuran: air kelapa 100 mL/L + asam humat 2 mL/L + silika 1 mL/L</li>
+                    <li>Naungi 70% selama 48 jam</li>
+                </ul>
+                
+                <h3>Pemulihan (3-7 hari):</h3>
+                <ul class="step-list">
+                    <li>Turunkan EC ke 0.4 mS/cm</li>
+                    <li>Beri bakteri rhizobium</li>
+                    <li>Naungi 50% selama 3 hari</li>
+                    <li>Tambah frekuensi flushing siang hari</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer">
+            <h3>Rekomendasi Nutrisi Tanaman untuk Iklim Khatulistiwa</h3>
+            <p>Diformulasikan berdasarkan pengalaman uji coba dan kondisi suhu tinggi (>30°C)</p>
+            <p>© 2023 Rekomendasi Pertanian Tropis | Disesuaikan dengan kondisi lokal</p>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality for vegetative/generative tabs
+        document.querySelectorAll('.phase-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs
+                document.querySelectorAll('.phase-tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Show the corresponding formula
+                const phase = this.getAttribute('data-phase');
+                document.getElementById('vegetative-formula').style.display = 
+                    phase === 'vegetative' ? 'block' : 'none';
+                document.getElementById('generative-formula').style.display = 
+                    phase === 'generative' ? 'block' : 'none';
+            });
+        });
+        
+        // Simple animation for cards on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 200 * index);
+            });
+        });
+    </script>
+</body>
+</html>
